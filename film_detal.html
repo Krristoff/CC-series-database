@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+{% block title %}
+{{ film_data[0].title }}
+{% endblock %}
+{% block content %}
+
+    <a href="/actors">
+    <button >
+    Wróć
+   </button> </a>
+{#    {% for film in film_data %}#}
+{#    <p> Title : {{ film.title }}</p>#}
+{#    <p> Year : {{ film.year }}</p>#}
+{##}
+{#{#}
+{##}
+{#{% endfor %}#}
+
+    <p> title: {{ film_data[0].title }}</p>
+    <p> year: {{ film_data[0].year }}</p>
+    <p> overview: {{ film_data[0].overview }}</p>
+    <p> rating: {{ film_data[0].rating }}</p>
+    <p> runtime: {{ film_data[0].runtime }}</p>
+    <p> trailer: {{ film_data[0].trailer }}</p>
+    <p> homepage: {{ film_data[0].homepage }}</p>
+
+{% endblock %}
+

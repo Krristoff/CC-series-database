@@ -1,0 +1,84 @@
+{% extends 'layout.html' %}
+{% block title %}Seasons{% endblock %}
+{% block content %}
+
+
+<div class="card">
+    <h2>Seasons</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Title</th>
+                <th>Overview</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for season in seasons %}
+            <tr>
+                <td>{{ season.season_number }}</td>
+                <td>{{ season.title }}</td>
+                <td>{{ season.overview }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style="width:20%; margin: 0 auto; padding: 10px;">
+ <!-- Trigger/Open The Modal -->
+<button id="myBtn">Add new season</button>
+
+<!-- The Modal -->
+<div id="myModal" class="modal">
+
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+      <div style="width: 30%; margin: 0 auto;">
+ <form>
+  <label for="number">Season number:</label><br>
+  <input type="text" id="number" name="number"><br>
+  <label for="title">Season title:</label><br>
+  <input type="text" id="title" name="title"><br>
+
+  <label for="overview">Season overview:</label><br>
+      <textarea name="overview" id="overview" rows="10" cols="30"></textarea><br>
+            <div style="width: 100px; margin: 0 auto; padding: 10px;">
+                <a href="#"><button type="button" id="addSeason">Save</button></a>
+                </div>
+</form>
+          </div>
+  </div>
+
+</div>
+    </div>
+
+</div>
+
+    <script>
+let modal = document.getElementById("myModal");
+
+let btn = document.getElementById("myBtn");
+
+let btn_in = document.getElementById("addSeason")
+
+let span = document.getElementsByClassName("close")[0];
+
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+btn_in.onclick = function() {
+  modal.style.display = "none";
+}
+
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+    </script>
+{% endblock %}

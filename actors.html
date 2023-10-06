@@ -1,0 +1,72 @@
+{% extends 'layout.html' %}
+{% block title %}Actors{% endblock %}
+{% block content %}
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modal-content"></div>
+    </div>
+</div>
+    <table>
+        <thead>
+        <tr> Name</tr>
+        <tr> Birthday</tr>
+        <tr> Death</tr>
+        <tr> Biography</tr>
+        </thead>
+        <tbody>
+    {% for actor in actors %}
+        <tr>
+            <td>
+                <button onclick="fetchData({{ actor.id }})">Show films</button>
+            </td>
+
+            <td> {{ actor.name }}  </td>
+            <td> {{ actor.birthday }} </td>
+            <td> {{ actor.death }}</td>
+            <td>{{ actor.biography }}</td>
+
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    const url = "/actors/getShows"
+    const fetchData = (id) => {
+        fetch(url, {
+            method: "POST",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: new URLSearchParams({
+                'id': id,
+            }),
+        })
+            .then(res => res.json())
+            .then(res => showModal(res))
+    }
+    const showModal = (data) => {
+        document.getElementById("modal").style.display = "block";
+        document.getElementById("modal-content").innerHTML = "";
+        data.data.forEach((item) => {
+            const p = document.createElement("p");
+            const a = document.createElement("a");
+            a.innerText = item.title;
+            a.href = `/film/${item.title}`;
+            p.appendChild(a);
+            document.getElementById("modal-content").appendChild(p);
+        });
+        document.addEventListener('click', function(e) {
+            const modal = document.getElementById('modal');
+            if (e.target == modal) {
+                closeModal();
+            }
+        });
+    }
+    const closeModal = () => {
+        document.getElementById("modal").style.display = "none";
+    }
+</script>
+{% endblock %}

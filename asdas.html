@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+{% block title %}Actors{% endblock %}
+{% block content %}
+    <div id="modal">
+        <button onclick="closeModal()">Close</button>
+
+        <div id="modalContent" ></div>
+    </div>
+
+    <table>
+        <thead>
+        <tr> Name</tr>
+        <tr> Birthday</tr>
+        <tr> Death</tr>
+        <tr> Biography</tr>
+        </thead>
+        <tbody>
+
+        {% for actor in actors %}
+            <tr>
+                <td>
+                    <button onclick="fetchData({{ actor.id }})">Inforamtion about films</button>
+                </td>
+
+                <td> {{ actor.name }}  </td>
+                <td> {{ actor.birthday }} </td>
+                <td> {{ actor.death }}</td>
+                <td>{{ actor.biography }}</td>
+
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const url = "/actors/getShows"
+        const fetchData = (id) => {
+            fetch(url, {
+                method: "POST",
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: new URLSearchParams({
+                    'id': id,
+                }),
+            })
+                .then(res => res.json())
+                .then(res => showModal(res))
+        }
+        const showModal = (data) => {
+            document.getElementById("modalContent").innerHTML = ""
+            data.data.forEach((item) => {
+                const p = document.createElement("p")
+                {#p.innerText=item.title#}
+                const a = document.createElement("a")
+                a.innerText = item.title
+                a.href = `/film/${item.title}`
+                p.appendChild(a)
+                document.getElementById("modalContent").appendChild(p)
+            })
+        }
+        const closeModal = () => {
+            document.getElementById("modal").style.display = "none"
+        }
+    </script>
+{% endblock %}

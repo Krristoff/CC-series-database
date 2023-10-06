@@ -1,0 +1,94 @@
+{% extends 'layout.html' %}
+{% block title %}Shows{% endblock %}
+{% block content %}
+    <div style="width:20%; margin: 0 auto; padding: 5px; ">
+
+        <button id="Btn" style="color: White; background: #278bc4">Filter rating</button>
+
+        <div id="Modal" class="modal">
+
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <form>
+                    <label for="number">Rating:</label><br>
+
+                    <input type="number" id="rating" name="rating" min="1" max="10" required>
+
+                    <a href="#">
+                        <button type="button" id="addRating" onclick="fetchData()">Save</button>
+                    </a>
+                </form>
+            </div>
+{# <div id="modal">#}
+{#        <button onclick="closeModal()">Close</button>#}
+{##}
+{#        <div id="modalContent" ></div>#}
+{#    </div>#}
+        </div>
+</div>
+    <div class="card">
+        <h2>Shows</h2>
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Rating</th>
+      <th>Overview</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for show in allfilm %}
+    <tr>
+      <td>{{ show.title }}</td>
+      <td>{{ show.rating }}</td>
+      <td>{{ show.overview }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+    </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+    const saveData=()=>{
+        const value= document.getElementById("rating").value;
+
+        const url="/session"
+        fetch(url, {
+            method: "POST",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            body: new URLSearchParams({
+                'value': value,
+            }),
+        })
+            .then(res => res.json())
+            .then(res => console.log(res))
+
+
+    }
+        let modal = document.getElementById("Modal");
+
+        let btn = document.getElementById("Btn");
+        let btn_in = document.getElementById("addRating")
+        let span = document.getElementsByClassName("close")[0];
+
+        btn.onclick = function () {
+            modal.style.display = "block";
+        }
+
+        span.onclick = function () {
+            modal.style.display = "none";
+        }
+
+        btn_in.onclick = function () {
+            modal.style.display = "none";
+        }
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+
+{% endblock %}

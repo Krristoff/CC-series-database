@@ -1,0 +1,176 @@
+{#{% extends 'layout.html' %}#}
+{#{% block title %}{{ show.title }}{% endblock %}#}
+{#{% block content %}#}
+{##}
+{#<div class="card detailed-view">#}
+{#    <script type="text/javascript">#}
+{#        var videoId = '{{ show.trailer_id }}';#}
+{#    </script>#}
+{#    <script type="text/javascript" src="{{ url_for('static', filename='js/embed-youtube.js') }}"></script>#}
+{#    <div class="row">#}
+{#        <div class="col col-twothird">#}
+{#            <h2>{{ show.title }}</h2>#}
+{#            <p class="small grayed">{{ show.runtime_str}} <span class="separator">|</span> {{ show.rating_string }}#}
+{#                &#9734;#}
+{#                <span class="separator">|</span>{{ show.genres_list }}</p>#}
+{#            <p>{{ show.overview }}</p>#}
+{#            <p><b>Stars:</b>&nbsp;#}
+{#                {{ show.characters_str }}#}
+{#            </p>#}
+{#        </div>#}
+{#        <div {% if show.trailer %} id="player" {% endif %} class="trailer col col-third"></div>#}
+{#    </div>#}
+{#</div>#}
+{#<div class="card">#}
+{#    <h2>Seasons</h2>#}
+{#    <table>#}
+{#        <thead>#}
+{#            <tr>#}
+{#                <th>&nbsp;</th>#}
+{#                <th>Title</th>#}
+{#                <th>Overview</th>#}
+{#            </tr>#}
+{#        </thead>#}
+{#        <tbody>#}
+{#            {% for season in seasons %}#}
+{#            <tr>#}
+{#                <td>{{ season.season_number }}</td>#}
+{#                <td>{{ season.title }}</td>#}
+{#                <td>{{ season.overview }}</td>#}
+{#            </tr>#}
+{#            {% endfor %}#}
+{#        </tbody>#}
+{#    </table>#}
+{#    <div style="width:20%; margin: 0 auto; padding: 10px;">#}
+{# <!-- Trigger/Open The Modal -->#}
+{#<button id="myBtn">Add new season</button>#}
+{##}
+{#<!-- The Modal -->#}
+{#<div id="myModal" class="modal">#}
+{##}
+{#  <!-- Modal content -->#}
+{#  <div class="modal-content">#}
+{#    <span class="close">&times;</span>#}
+{# <form>#}
+{#  <label for="number">Season number:</label><br>#}
+{#  <input type="text" id="number" name="number"><br>#}
+{#  <label for="title">Season title:</label><br>#}
+{#  <input type="text" id="title" name="title"><br>#}
+{##}
+{#  <label for="overview">Season overview:</label><br>#}
+{#      <textarea name="overview" id="overview" rows="10" cols="30"></textarea><br>#}
+{#            <a href="#"><button type="button" id="addSeason">Save</button></a>#}
+{#</form>#}
+{#  </div>#}
+{##}
+{#</div>#}
+{#    </div>#}
+{##}
+{#</div>#}
+{##}
+{#    <script>#}
+{#let modal = document.getElementById("myModal");#}
+{##}
+{#let btn = document.getElementById("myBtn");#}
+{#let btn_in = document.getElementById("addSeason")#}
+{#let span = document.getElementsByClassName("close")[0];#}
+{##}
+{#btn.onclick = function() {#}
+{#  modal.style.display = "block";#}
+{#}#}
+{##}
+{#span.onclick = function() {#}
+{#  modal.style.display = "none";#}
+{#}#}
+{##}
+{#btn_in.onclick = function() {#}
+{#  modal.style.display = "none";#}
+{#}#}
+{#window.onclick = function(event) {#}
+{#  if (event.target == modal) {#}
+{#    modal.style.display = "none";#}
+{#  }#}
+{#}#}
+{#    </script>#}
+{#{% endblock %}#}
+
+{% extends 'layout.html' %}
+{% block title %}{{ show.title }}{% endblock %}
+{% block content %}
+
+<div class="card detailed-view">
+    <script type="text/javascript">
+        var videoId = '{{ show.trailer_id }}';
+    </script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/embed-youtube.js') }}"></script>
+    <div class="row">
+        <div class="col col-twothird">
+            <h2>{{ show.title }}</h2>
+            <p class="small grayed">{{ show.runtime_str}} <span class="separator">|</span> {{ show.rating_string }}
+                &#9734;
+                <span class="separator">|</span>{{ show.genres_list }}</p>
+            <p>{{ show.overview }}</p>
+            <p><b>Stars:</b>&nbsp;
+                {{ show.characters_str }}
+            </p>
+            <p>
+                <button id="actors-button">Actors' list</button>
+            </p>
+            <div id="modal-card" class="card">
+                <div class="modal-content">
+                    <span class="close">&times;</span>
+                <p>ACTORS' LIST</p>
+                <ul>
+                    <li>WHATEVER 1</li>
+                    <li>WHATEVER 2</li>
+                </ul>
+                {% for character in characters %}
+                    <li>{{ character.character_name }}</li>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div {% if show.trailer %} id="player" {% endif %} class="trailer col col-third"></div>
+    </div>
+</div>
+<div class="card">
+    <h2>Seasons</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Title</th>
+                <th>Overview</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for season in seasons %}
+            <tr>
+                <td>{{ season.season_number }}</td>
+                <td>{{ season.title }}</td>
+                <td>{{ season.overview }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+    <script>
+        const listButton = document.getElementById('actors-button')
+        const modalActorsList = document.getElementById('modal-card')
+        const span = document.getElementsByClassName('close')[0]
+
+
+        listButton.onclick = () => actorsList()
+
+        function actorsList(){
+            fetch("http://localhost:5000/api/actors/{{ show.id }}/")
+            .then((response) => response.json())
+            .then((data) => console.log(data));
+
+            let modalCard = document.getElementById('modal-card')
+                 modalCard.style.display = 'block'
+
+        }
+
+    </script>
+{% endblock %}

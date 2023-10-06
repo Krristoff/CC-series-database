@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+{% block title %}{{ episode.title }}{% endblock %}
+{% block content %}
+
+<div class="card detailed-view">
+    <div class="row">
+        <div class="col col-twothird">
+            <h2>{{ episode.title }}</h2>
+            <h3>Episode number: {{ episode.episode_number }}</h3>
+            <p>{{ episode.overview }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

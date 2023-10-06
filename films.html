@@ -1,0 +1,9 @@
+{% extends 'layout.html' %}
+{% block title %}Actors{% endblock %}
+{% block content %}
+    <div class="card" id="actors">
+    <h2>Actors</h2>
+    <button id="actors-button" onclick="showActors('{{ url_for('api_actors', show_id=show.id) }}')">Show</button>
+    <div id="actors-container"></div>
+</div>
+{% endblock %}
